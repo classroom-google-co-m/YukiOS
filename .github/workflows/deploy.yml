@@ -1,3 +1,4 @@
+
 name: Deploy YukiOS
 
 on:
@@ -13,22 +14,23 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - run: pnpm install --no-frozen-lockfile
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
         working-directory: webos-desktop
 
-      - run: pnpm run build
+      - name: Build YukiOS
+        run: npm run build
         working-directory: webos-desktop
+        env:
+          VITE_SINGLE_FILE: "true"
 
       - uses: actions/configure-pages@v5
 
